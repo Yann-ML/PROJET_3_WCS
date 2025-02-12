@@ -24,6 +24,10 @@ list_artiste = sorted(df['artist_name'].unique().tolist())
 ################################## APPLICATION ##################################
 
 fig = px.bar(data_frame=df[['album_name', 'artist_name', 'total_tracks']][df['artist_name'] == ''],
+    x='artist_name'
+    )
+
+fig2 = px.bar(data_frame=df[['album_name', 'artist_name', 'total_tracks']][df['artist_name'] == ''],
     x='album_name',
     y='total_tracks'
     )
@@ -40,7 +44,10 @@ app.layout = html.Div([
             ),
     dcc.Graph(  figure=fig,
                 id="fig_test"
-            ) # affichage du graph
+            ),
+    dcc.Graph(  figure=fig2,
+                id="fig_test2"
+            ) # affichage du graph# affichage du graph
 ])
 
 
@@ -48,7 +55,8 @@ app.layout = html.Div([
 
 
 @app.callback(
-    Output(component_id="fig_test", component_property="figure"),
+    [Output(component_id="fig_test", component_property="figure"),
+    Output(component_id="fig_test2", component_property="figure")],
     Input(component_id="input_search", component_property="value")
 )
 
@@ -56,8 +64,7 @@ def update_graph(value):
     
   # Utilisez Plotly Express pour créer un graphique en barres des 10 premiers livres, en affichant le nombre de pages par titre.
     fig = px.bar(data_frame=df[['album_name', 'artist_name', 'total_tracks']][df['artist_name'] == value],
-       x='album_name',
-       y='total_tracks'
+       x='album_name'
        )
     fig.update_layout(title="Test", xaxis_title="Albums", yaxis_title = "Nb de titres")  
 
@@ -66,13 +73,13 @@ def update_graph(value):
 def update_graph2(value):
     
   # Utilisez Plotly Express pour créer un graphique en barres des 10 premiers livres, en affichant le nombre de pages par titre.
-    fig2 = px.histogram(data_frame=df[['album_name', 'artist_name', 'total_tracks']][df['artist_name'] == value],
-       x='popularity',
-       y='total_tracks'
-       )
+    fig2 = px.bar(data_frame=df[['album_name', 'artist_name', 'total_tracks']][df['artist_name'] == ''],
+                    x='album_name',
+                    y='total_tracks'
+    )
     fig.update_layout(title="Test", xaxis_title="Albums", yaxis_title = "Nb de titres")  
 
-    return fig
+    return fig2
 
 if __name__ == '__main__':
     app.run_server(debug=True)
