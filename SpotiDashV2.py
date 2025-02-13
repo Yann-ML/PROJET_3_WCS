@@ -12,7 +12,7 @@ import plotly.express as px
 import pandas as pd
 
 # Création de l'application
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
+app = dash.Dash(__name__)
 
 
 ################################## CHARGEMENT VARIABLE ENVIRONNEMENT ##################################
@@ -61,11 +61,13 @@ button_style = {
 # Titres et textes
 app.layout = html.Div([
     
-    # Titre de la page
+    ####################### TITRE PAGE #######################
+    
     html.H1(['SpotiDash'],
            style={'textAlign': 'center'}),
 
-    # Affichage bulle informations éléments du DF
+    ####################### BULLE INFOS DF #######################
+    
     html.Div([
 
         # Affichage nb artistes
@@ -102,122 +104,134 @@ app.layout = html.Div([
     # Affichage pour avoir les 4 éléments visibles sur la même ligne
     ], style={'display': 'flex', 'flexDirection': 'row'}),
 
-    # Case de sélection de la donnée ('artiste' dans le cas présent)
+    ########################### CASE DE SELECTION ARTISTE ###########################
+
     dcc.Dropdown(list_artiste,
                 id='input_search',
                 value=''),
 
-    # Affichage photo artiste, popularité et biographie
+    ########################### ARTISTE SELECTIONNE / BIOGRAPHIE, PHOTO ###########################
+    
+    html.Div([
+        
+        html.Div([
+            html.Label(
+                id='pop_artist',
+                style={'flex' : '2'}),
+            html.Label(
+                id='bio_artist',
+                style={'flex' : '6'}),
+                ], style={'display' : 'flex',
+                          'flexDirection': 'column',
+                          'gap' : '2px'}),
+        html.Img(
+            style={'height': '15%',
+                   'width': '15%',
+                   'borderRadius' : '50%'},
+            id='img_artist'),
+        
+        ], style={'display': 'flex', 
+                  'flexDirection': 'row'}),
+    
+    ########################### TOP 3 ALBUMS ###########################
+
+    # Ligne affichage album 1
     html.Div([
         html.Img(
-            style={'height': '8%','width': '8%'},
-            id='img_artist'),
-        html.Label(
-            id='pop_artist'),
-        html.Label(
-            id='bio_artist')
-        ], style={'display': 'flex', 'flexDirection': 'row'}),
-
-    # En fonction de l'artiste recherché, récupère ses albums triés par popularité et affiche l'url de l'album
-    
-    # Bloc affichage Album à gauche et titre à droite
-    html.Div([
+                id='img_album1',
+                style={'height': '15%',
+                       'width': '15%',
+                       'flex': '2'}),
         
-        # top 3 pochette album + titre album
+        # colonne affichage infos album 1
         html.Div([
+            html.Label(id='title_album1'),
+            html.Label(id='pop_album1'),
+            html.Label(id='release_album1'),
+            html.Label(id='label_album1')
+                ], style={'display': 'flex',
+                            'flexDirection': 'column',
+                            'flex' : '2',
+                            'gap' : '5px'}),
         
-            # Ligne affichage album 1
-            html.Div([
-                html.Img(
-                        style={'height': '8%','width': '8%'},
-                        id='img_album1'),
-                
-                # colonne affichage infos album 1
-                html.Div([
-                    html.Label(
-                            id='title_album1'),
-                    html.Label(
-                            id='pop_album1'),
-                    html.Label(
-                            id='release_album1'),
-                    html.Label(
-                            id='label_album1')
-                            ], style={'display': 'flex', 'flexDirection': 'column'}),
-                
-                    ], style={'display': 'flex', 'flexDirection': 'row'}),
+        # affichage infos album demandé au chat
+        html.Label(
+                id='info_album1',
+                style={'flex' : '8'})
+        
+            ], style={'display': 'flex',
+                      'flexDirection': 'row',
+                      'alignItems' : 'center',
+                      'justifyContent' : 'space-between',
+                      'width' : '100%',
+                      'gap' : '20px',
+                      'padding' : '20px'}),
 
-            # Ligne affichage album 2
-            html.Div([
-                html.Img(
-                        style={'height': '8%','width': '8%'},
-                        id='img_album2'),
-                
-                # colonne affichage infos album 2
-                html.Div([
-                    html.Label(
-                            id='title_album2'),
-                    html.Label(
-                            id='pop_album2'),
-                    html.Label(
-                            id='release_album2'),
-                    html.Label(
-                            id='label_album2')
-                            ], style={'display': 'flex', 'flexDirection': 'column'}),
-                
-                    ], style={'display': 'flex', 'flexDirection': 'row'}),
-            
-            # Ligne affichage album 3
-            html.Div([
-                html.Img(
-                        style={'height': '8%','width': '8%'},
-                        id='img_album3'),
-                
-                # colonne affichage infos album 3
-                html.Div([
-                    html.Label(
-                            id='title_album3'),
-                    html.Label(
-                            id='pop_album3'),
-                    html.Label(
-                            id='release_album3'),
-                    html.Label(
-                            id='label_album3')
-                            ], style={'display': 'flex', 'flexDirection': 'column'}),
-                
-                    ], style={'display': 'flex', 'flexDirection': 'row'}),
-
-        # affichage en colonne du bloc album+titre
-        ], style={'display': 'flex', 'flexDirection': 'column'}), 
-
-    # bloc affichage top tracks à droite du bloc album
+    # Ligne affichage album 2
     html.Div([
-
-        # affichage des titres en colonne
-        html.Div([
-            html.Iframe(
-                    src="https://open.spotify.com/embed/track/57tzAvfPHXHzCHUNp9AUBm?utm_source=generator",
-                    width="100%",
-                    height="100%",
-                    allow="encrypted-media",),
-            html.Iframe(
-                    src="https://open.spotify.com/embed/track/57tzAvfPHXHzCHUNp9AUBm?utm_source=generator",
-                    width="100%",
-                    height="100%",
-                    allow="encrypted-media",),            
-            html.Iframe(
-                    src="https://open.spotify.com/embed/track/57tzAvfPHXHzCHUNp9AUBm?utm_source=generator",
-                    width="100%",
-                    height="100%",
-                    allow="encrypted-media",)
-                ], style={'display': 'flex', 'flexDirection': 'column'})
+        html.Img(
+                id='img_album2',
+                style={'height': '15%',
+                       'width': '15%',
+                       'flex': '2'}),
         
-            ], style={'display': 'flex', 'flexDirection': 'column'})
-             
-    # affichage bloc album+titre en ligne
-    ], style={'display': 'flex', 'flexDirection': 'row'}),
+        # colonne affichage infos album 2
+        html.Div([
+            html.Label(id='title_album2'),
+            html.Label(id='pop_album2'),
+            html.Label(id='release_album2'),
+            html.Label(id='label_album2')
+                ], style={'display': 'flex',
+                            'flexDirection': 'column',
+                            'flex' : '2',
+                            'gap' : '5px'}),
+        
+        # affichage infos album demandé au chat
+        html.Label(
+                id='info_album2',
+                style={'flex' : '8'})
+        
+            ], style={'display': 'flex',
+                      'flexDirection': 'row',
+                      'alignItems' : 'center',
+                      'justifyContent' : 'space-between',
+                      'width' : '100%',
+                      'gap' : '20px',
+                      'padding' : '20px'}),
+        
+    # Ligne affichage album 3
+     html.Div([
+        html.Img(
+                id='img_album3',
+                style={'height': '15%',
+                       'width': '15%',
+                       'flex': '2'}),
+        
+        # colonne affichage infos album 3
+        html.Div([
+            html.Label(id='title_album3'),
+            html.Label(id='pop_album3'),
+            html.Label(id='release_album3'),
+            html.Label(id='label_album3')
+                ], style={'display': 'flex',
+                            'flexDirection': 'column',
+                            'flex' : '2',
+                            'gap' : '5px'}),
+        
+        # affichage infos album demandé au chat
+        html.Label(
+                id='info_album3',
+                style={'flex' : '8'})
+        
+            ], style={'display': 'flex',
+                      'flexDirection': 'row',
+                      'alignItems' : 'center',
+                      'justifyContent' : 'space-between',
+                      'width' : '100%',
+                      'gap' : '20px',
+                      'padding' : '20px'})
     
 ])
-
 
 ################################## APPEL DES COMPOSANTS ##################################
 
@@ -233,18 +247,21 @@ app.layout = html.Div([
      Output(component_id="pop_album1", component_property='children'),
      Output(component_id="release_album1", component_property='children'),
      Output(component_id="label_album1", component_property='children'),
+     Output(component_id="info_album1", component_property='children'),
      
      Output(component_id="img_album2", component_property='src'),
      Output(component_id="title_album2", component_property='children'),
      Output(component_id="pop_album2", component_property='children'),
      Output(component_id="release_album2", component_property='children'),
      Output(component_id="label_album2", component_property='children'),
-     
+     Output(component_id="info_album2", component_property='children'),
+          
      Output(component_id="img_album3", component_property='src'),
      Output(component_id="title_album3", component_property='children'),
      Output(component_id="pop_album3", component_property='children'),
      Output(component_id="release_album3", component_property='children'),
-     Output(component_id="label_album3", component_property='children')],
+     Output(component_id="label_album3", component_property='children'),
+     Output(component_id="info_album3", component_property='children')],
         
     Input(component_id="input_search", component_property="value")
 )
@@ -285,29 +302,40 @@ def update_album_image(value):
         img_artist = artist_info['image_artist']
         pop_artist = f"Popularité : {artist_info['popularity_artist']}"
         
+        ##################### PROMPT INFOS ARTISTE #####################
+        
         # génération du modèle d'IAG
         model = genai.GenerativeModel('gemini-1.5-flash')
         
         # définition du prompt
         prompt = f"Peux tu m'afficher le maximum d'informations sur {value} dans un style biographie d'artiste ? Je veux un bloc de 10 lignes maximum, je ne veux pas de MarkDown dans le texte. soit si tu veux afficher un mot en gras mets le en gras directement"
+        reponse = model.generate_content(prompt) # génération de la réponse du prompt
+        texte = html.P(reponse.text) # transformation en texte de la réponse et affichage
         
-        src="https://open.spotify.com/embed/track/57tzAvfPHXHzCHUNp9AUBm?utm_source=generator"
+        ##################### PROMPT INFOS ALBUM #####################
         
-        # réponse du prompt et génération
-        reponse = model.generate_content(prompt)
-        texte = html.P(reponse.text) 
+        prompt2 = f"Peux-tu me raconter l'histoire de l'album {title_album1} de l'artiste {value} en 10 lignes ?"
+        reponse2 = model.generate_content(prompt2) # génération de la réponse du prompt
+        info_album1 = html.P(reponse2.text) # transformation en texte de la réponse et affichage
+        
+        prompt3 = f"Peux-tu me raconter l'histoire de l'album {title_album2} de l'artiste {value} en 10 lignes ?"
+        reponse3 = model.generate_content(prompt3) # génération de la réponse du prompt
+        info_album2 = html.P(reponse3.text) # transformation en texte de la réponse et affichage
+        
+        prompt4 = f"Peux-tu me raconter l'histoire de l'album {title_album3} de l'artiste {value} en 10 lignes ?"
+        reponse4 = model.generate_content(prompt4) # génération de la réponse du prompt
+        info_album4 = html.P(reponse4.text) # transformation en texte de la réponse et affichage
         
         return img_artist, pop_artist, texte, \
-                img_album1, title_album1, pop_album1, release_album1, label_album1,\
-                img_album2, title_album2, pop_album2, release_album2, label_album2,\
-                img_album3, title_album3, pop_album3, release_album3, label_album3\
+                img_album1, title_album1, pop_album1, release_album1, label_album1, info_album1, \
+                img_album2, title_album2, pop_album2, release_album2, label_album2, info_album2,\
+                img_album3, title_album3, pop_album3, release_album3, label_album3, info_album4\
                 
-        
-    return ' ', ' ', ' ', ' ', ' ',\
-            ' ', ' ', ' ', ' ', ' ',\
-            ' ', ' ', ' ', ' ', ' ', \
-            ' ', ' ', ' '  # Si aucun artiste n'est sélectionné, ne pas afficher d'image
-
+    # si aucun artiste sélectionné, ne rien afficher (autant de ' ' que de return attendus)
+    return ' ', ' ', ' ', \
+            ' ', ' ', ' ', ' ', ' ', ' ',\
+            ' ', ' ', ' ', ' ', ' ', ' ',\
+            ' ', ' ', ' ', ' ', ' ', ' '
 
 if __name__ == '__main__':
     app.run_server(debug=True)
