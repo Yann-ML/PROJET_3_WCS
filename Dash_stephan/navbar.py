@@ -5,6 +5,8 @@ def create_navbar():
     # Create the Navbar using Dash Bootstrap Components
     navbar = dbc.NavbarSimple(
         children=[
+            dbc.NavItem(dbc.NavLink("écouter un titre", href='/page-4')),
+            dbc.NavLink("Exemple 2", disabled=True, href="#"),
             dbc.DropdownMenu(
                 nav=True,
                 in_navbar=True,
@@ -17,6 +19,7 @@ def create_navbar():
                     dbc.DropdownMenuItem(divider=True), # Divider item that appears in the dropdown menu 
                     dbc.DropdownMenuItem("Page 2", href='/page-2'), # Hyperlink item that appears in the dropdown menu
                     dbc.DropdownMenuItem("Page 3", href='/page-3'), # Hyperlink item that appears in the dropdown menu
+                    dbc.DropdownMenuItem("écouter un titre", href='/page-4'),
                 ],
             ),
         ],
